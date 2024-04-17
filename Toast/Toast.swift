@@ -285,14 +285,7 @@ public extension UIView {
     func hideToastActivity() {
         if let toast = objc_getAssociatedObject(self, &ToastKeys.activityView) as? UIView {
             UIView.animate(withDuration: ToastManager.shared.style.fadeDuration, delay: 0.0, options: [.curveEaseIn, .beginFromCurrentState], animations: {
-                switch ToastManager.shared.style.animateStyle {
-                case .fade:
-                    toast.alpha = 0.0
-                case .topIn:
-                    toast.frame.origin.y = -toast.frame.width
-                case .bottomIn:
-                    toast.frame.origin.y = self.bounds.size.height
-                }
+                toast.alpha = 0.0
             }) { _ in
                 toast.removeFromSuperview()
                 objc_setAssociatedObject(self, &ToastKeys.activityView, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -313,28 +306,13 @@ public extension UIView {
     
     private func makeToastActivity(_ toast: UIView, point: CGPoint) {
         toast.center = point
-        switch ToastManager.shared.style.animateStyle {
-        case .fade:
-            toast.alpha = 0.0
-        case .topIn:
-            toast.frame.origin.y = -toast.frame.width
-        case .bottomIn:
-            toast.frame.origin.y = self.bounds.size.height
-        }
-        
+        toast.alpha = 0.0
         objc_setAssociatedObject(self, &ToastKeys.activityView, toast, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
         self.addSubview(toast)
         
         UIView.animate(withDuration: ToastManager.shared.style.fadeDuration, delay: 0.0, options: .curveEaseOut, animations: {
-            switch ToastManager.shared.style.animateStyle {
-            case .fade:
-                toast.alpha = 1.0
-            case .topIn:
-                toast.center = point
-            case .bottomIn:
-                toast.center = point
-            }
+            toast.alpha = 1.0
         })
     }
     
@@ -365,7 +343,7 @@ public extension UIView {
     // MARK: - Private Show/Hide Methods
     private func showToast(_ toast: UIView, duration: TimeInterval, point: CGPoint) {
         toast.center = point
-        switch ToastManager.shared.style.animateStyle {
+        switch ToastManager.shared.animateStyle {
         case .fade:
             toast.alpha = 0.0
         case .topIn:
@@ -387,7 +365,7 @@ public extension UIView {
         objc_setAssociatedObject(toast, &ToastKeys.timer, timer, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
         UIView.animate(withDuration: ToastManager.shared.style.fadeDuration, delay: 0.0, options: [.curveEaseOut, .allowUserInteraction], animations: {
-            switch ToastManager.shared.style.animateStyle {
+            switch ToastManager.shared.animateStyle {
             case .fade:
                 toast.alpha = 1
             case .topIn:
@@ -409,7 +387,7 @@ public extension UIView {
         }
         
         UIView.animate(withDuration: ToastManager.shared.style.fadeDuration, delay: 0.0, options: [.curveEaseIn, .beginFromCurrentState], animations: {
-            switch ToastManager.shared.style.animateStyle {
+            switch ToastManager.shared.animateStyle {
             case .fade:
                 toast.alpha = 0.0
             case .topIn:
@@ -748,8 +726,6 @@ public struct ToastStyle {
      */
     public var activityBackgroundColor: UIColor = UIColor.black.withAlphaComponent(0.8)
     
-    //动画方式
-    public var animateStyle: ToastAnmateStyle = .fade
 }
 
 // MARK: - Toast Manager
@@ -772,6 +748,9 @@ public class ToastManager {
      
      */
     public var style = ToastStyle()
+    
+    //动画方式
+    public var animateStyle: ToastAnmateStyle = .fade
     
     /**
      Enables or disables tap to dismiss on toast views. Default is `true`.
