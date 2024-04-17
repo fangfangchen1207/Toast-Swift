@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage = "https://github.com/scalessec/Toast-Swift"
   s.license = 'MIT'
   s.author = { "Charles Scalesse" => "scalessec@gmail.com" }
-  s.source = { :git => "https://github.com/scalessec/Toast-Swift.git", :tag => "5.1.1" }
+  s.source = { :git => "https://github.com/fangfangchen1207/Toast-Swift", :tag => s.version }
   s.platform = :ios
   s.source_files = 'Toast/*.swift'
   s.resource_bundles = {'Toast-Swift': 'Toast/Resources/PrivacyInfo.xcprivacy'}
